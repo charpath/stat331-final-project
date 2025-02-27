@@ -3133,59 +3133,647 @@ vertical-align: -.125em;
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries here</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data here</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;murder_per_100000_people.csv&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>unemployment <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;long_term_unemployment_rate_percent.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>Data description goes here…</em> ** VARIABLES ARE: ** LONG TERM EMPLOYMENT RATE (%)<strong> </strong> and MURDERS PER 100000 PEOPLE**</p>
+<p><em>Data description goes here…</em></p>
+<p><strong>VARIABLES ARE:</strong></p>
+<p><strong>LONG TERM EMPLOYMENT RATE (%)</strong></p>
+<p><strong>and MURDERS PER 100000 PEOPLE</strong></p>
 </section>
 <section id="cleaning-murders-data" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-murders-data">Cleaning Murders Data</h3>
 <p>First, we’ll start with the murders dataset. We can take a look to see if there’s anything that clearly needs to change:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 68
-  country  `1950` `1951` `1952` `1953` `1954` `1955` `1956` `1957` `1958` `1959`
-  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-1 Albania      NA  NA     NA     NA      NA   NA      NA     NA    NA      NA   
-2 Argenti…     NA  NA     NA     NA      NA   NA      NA     NA    NA      NA   
-3 Armenia      NA  NA     NA     NA      NA   NA      NA     NA    NA      NA   
-4 Antigua…     NA  NA     NA     NA      NA   NA      NA     NA    NA      NA   
-5 Austral…      1   1.33   1.46   1.25    1.3  1.39    1.3    1.34  1.54    1.52
-6 Austria      NA  NA     NA     NA      NA    0.976   1.58   1.2   0.965   1.16
-# ℹ 57 more variables: `1960` &lt;dbl&gt;, `1961` &lt;dbl&gt;, `1962` &lt;dbl&gt;, `1963` &lt;dbl&gt;,
-#   `1964` &lt;dbl&gt;, `1965` &lt;dbl&gt;, `1966` &lt;dbl&gt;, `1967` &lt;dbl&gt;, `1968` &lt;dbl&gt;,
-#   `1969` &lt;dbl&gt;, `1970` &lt;dbl&gt;, `1971` &lt;dbl&gt;, `1972` &lt;dbl&gt;, `1973` &lt;dbl&gt;,
-#   `1974` &lt;dbl&gt;, `1975` &lt;dbl&gt;, `1976` &lt;dbl&gt;, `1977` &lt;dbl&gt;, `1978` &lt;dbl&gt;,
-#   `1979` &lt;dbl&gt;, `1980` &lt;dbl&gt;, `1981` &lt;dbl&gt;, `1982` &lt;dbl&gt;, `1983` &lt;dbl&gt;,
-#   `1984` &lt;dbl&gt;, `1985` &lt;dbl&gt;, `1986` &lt;dbl&gt;, `1987` &lt;dbl&gt;, `1988` &lt;dbl&gt;,
-#   `1989` &lt;dbl&gt;, `1990` &lt;dbl&gt;, `1991` &lt;dbl&gt;, `1992` &lt;dbl&gt;, `1993` &lt;dbl&gt;, …</code></pre>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders) <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">country</th>
+<th style="text-align: right;">1950</th>
+<th style="text-align: right;">1951</th>
+<th style="text-align: right;">1952</th>
+<th style="text-align: right;">1953</th>
+<th style="text-align: right;">1954</th>
+<th style="text-align: right;">1955</th>
+<th style="text-align: right;">1956</th>
+<th style="text-align: right;">1957</th>
+<th style="text-align: right;">1958</th>
+<th style="text-align: right;">1959</th>
+<th style="text-align: right;">1960</th>
+<th style="text-align: right;">1961</th>
+<th style="text-align: right;">1962</th>
+<th style="text-align: right;">1963</th>
+<th style="text-align: right;">1964</th>
+<th style="text-align: right;">1965</th>
+<th style="text-align: right;">1966</th>
+<th style="text-align: right;">1967</th>
+<th style="text-align: right;">1968</th>
+<th style="text-align: right;">1969</th>
+<th style="text-align: right;">1970</th>
+<th style="text-align: right;">1971</th>
+<th style="text-align: right;">1972</th>
+<th style="text-align: right;">1973</th>
+<th style="text-align: right;">1974</th>
+<th style="text-align: right;">1975</th>
+<th style="text-align: right;">1976</th>
+<th style="text-align: right;">1977</th>
+<th style="text-align: right;">1978</th>
+<th style="text-align: right;">1979</th>
+<th style="text-align: right;">1980</th>
+<th style="text-align: right;">1981</th>
+<th style="text-align: right;">1982</th>
+<th style="text-align: right;">1983</th>
+<th style="text-align: right;">1984</th>
+<th style="text-align: right;">1985</th>
+<th style="text-align: right;">1986</th>
+<th style="text-align: right;">1987</th>
+<th style="text-align: right;">1988</th>
+<th style="text-align: right;">1989</th>
+<th style="text-align: right;">1990</th>
+<th style="text-align: right;">1991</th>
+<th style="text-align: right;">1992</th>
+<th style="text-align: right;">1993</th>
+<th style="text-align: right;">1994</th>
+<th style="text-align: right;">1995</th>
+<th style="text-align: right;">1996</th>
+<th style="text-align: right;">1997</th>
+<th style="text-align: right;">1998</th>
+<th style="text-align: right;">1999</th>
+<th style="text-align: right;">2000</th>
+<th style="text-align: right;">2001</th>
+<th style="text-align: right;">2002</th>
+<th style="text-align: right;">2003</th>
+<th style="text-align: right;">2004</th>
+<th style="text-align: right;">2005</th>
+<th style="text-align: right;">2006</th>
+<th style="text-align: right;">2007</th>
+<th style="text-align: right;">2008</th>
+<th style="text-align: right;">2009</th>
+<th style="text-align: right;">2010</th>
+<th style="text-align: right;">2011</th>
+<th style="text-align: right;">2012</th>
+<th style="text-align: right;">2013</th>
+<th style="text-align: right;">2014</th>
+<th style="text-align: right;">2015</th>
+<th style="text-align: right;">2016</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Albania</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.49</td>
+<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">2.40</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4.42</td>
+<td style="text-align: right;">6.39</td>
+<td style="text-align: right;">3.64</td>
+<td style="text-align: right;">8.23</td>
+<td style="text-align: right;">8.23</td>
+<td style="text-align: right;">39.60</td>
+<td style="text-align: right;">19.20</td>
+<td style="text-align: right;">15.400</td>
+<td style="text-align: right;">3.960</td>
+<td style="text-align: right;">7.580</td>
+<td style="text-align: right;">7.40</td>
+<td style="text-align: right;">5.530</td>
+<td style="text-align: right;">4.290</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">3.070</td>
+<td style="text-align: right;">2.960</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2.300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Argentina</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4.65</td>
+<td style="text-align: right;">6.110</td>
+<td style="text-align: right;">6.81</td>
+<td style="text-align: right;">7.29</td>
+<td style="text-align: right;">7.14</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">8.41</td>
+<td style="text-align: right;">5.49</td>
+<td style="text-align: right;">3.55</td>
+<td style="text-align: right;">3.51</td>
+<td style="text-align: right;">4.01</td>
+<td style="text-align: right;">4.19</td>
+<td style="text-align: right;">4.20</td>
+<td style="text-align: right;">4.93</td>
+<td style="text-align: right;">5.10</td>
+<td style="text-align: right;">5.89</td>
+<td style="text-align: right;">5.63</td>
+<td style="text-align: right;">5.78</td>
+<td style="text-align: right;">6.10</td>
+<td style="text-align: right;">5.15</td>
+<td style="text-align: right;">4.40</td>
+<td style="text-align: right;">4.70</td>
+<td style="text-align: right;">4.23</td>
+<td style="text-align: right;">4.49</td>
+<td style="text-align: right;">4.22</td>
+<td style="text-align: right;">4.65</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Armenia</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.98</td>
+<td style="text-align: right;">2.23</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">3.13</td>
+<td style="text-align: right;">6.24</td>
+<td style="text-align: right;">7.18</td>
+<td style="text-align: right;">26.00</td>
+<td style="text-align: right;">7.94</td>
+<td style="text-align: right;">4.90</td>
+<td style="text-align: right;">4.40</td>
+<td style="text-align: right;">3.01</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: right;">2.57</td>
+<td style="text-align: right;">2.580</td>
+<td style="text-align: right;">2.220</td>
+<td style="text-align: right;">1.760</td>
+<td style="text-align: right;">2.25</td>
+<td style="text-align: right;">1.820</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.690</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.510</td>
+<td style="text-align: right;">1.100</td>
+<td style="text-align: right;">0.964</td>
+<td style="text-align: right;">1.120</td>
+<td style="text-align: right;">1.010</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Antigua and Barbuda</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.54</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4.45</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4.66</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Australia</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.33</td>
+<td style="text-align: right;">1.46</td>
+<td style="text-align: right;">1.25</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">1.390</td>
+<td style="text-align: right;">1.30</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">1.540</td>
+<td style="text-align: right;">1.52</td>
+<td style="text-align: right;">1.51</td>
+<td style="text-align: right;">1.40</td>
+<td style="text-align: right;">1.550</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">1.55</td>
+<td style="text-align: right;">1.49</td>
+<td style="text-align: right;">1.40</td>
+<td style="text-align: right;">1.430</td>
+<td style="text-align: right;">1.66</td>
+<td style="text-align: right;">1.33</td>
+<td style="text-align: right;">1.56</td>
+<td style="text-align: right;">1.87</td>
+<td style="text-align: right;">1.77</td>
+<td style="text-align: right;">1.99</td>
+<td style="text-align: right;">1.89</td>
+<td style="text-align: right;">1.70</td>
+<td style="text-align: right;">2.10</td>
+<td style="text-align: right;">1.96</td>
+<td style="text-align: right;">1.86</td>
+<td style="text-align: right;">1.86</td>
+<td style="text-align: right;">1.91</td>
+<td style="text-align: right;">1.90</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">1.78</td>
+<td style="text-align: right;">2.01</td>
+<td style="text-align: right;">1.98</td>
+<td style="text-align: right;">1.94</td>
+<td style="text-align: right;">2.10</td>
+<td style="text-align: right;">1.98</td>
+<td style="text-align: right;">1.79</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">1.83</td>
+<td style="text-align: right;">1.77</td>
+<td style="text-align: right;">1.61</td>
+<td style="text-align: right;">1.74</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">1.56</td>
+<td style="text-align: right;">1.550</td>
+<td style="text-align: right;">1.590</td>
+<td style="text-align: right;">1.580</td>
+<td style="text-align: right;">1.46</td>
+<td style="text-align: right;">1.270</td>
+<td style="text-align: right;">0.748</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.220</td>
+<td style="text-align: right;">0.978</td>
+<td style="text-align: right;">1.090</td>
+<td style="text-align: right;">1.170</td>
+<td style="text-align: right;">1.010</td>
+<td style="text-align: right;">1.050</td>
+<td style="text-align: right;">1.230</td>
+<td style="text-align: right;">1.060</td>
+<td style="text-align: right;">1.020</td>
+<td style="text-align: right;">1.110</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Austria</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">0.976</td>
+<td style="text-align: right;">1.58</td>
+<td style="text-align: right;">1.20</td>
+<td style="text-align: right;">0.965</td>
+<td style="text-align: right;">1.16</td>
+<td style="text-align: right;">1.22</td>
+<td style="text-align: right;">1.08</td>
+<td style="text-align: right;">0.996</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">0.991</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">1.49</td>
+<td style="text-align: right;">1.35</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">1.60</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">1.30</td>
+<td style="text-align: right;">1.51</td>
+<td style="text-align: right;">1.32</td>
+<td style="text-align: right;">1.21</td>
+<td style="text-align: right;">1.25</td>
+<td style="text-align: right;">1.53</td>
+<td style="text-align: right;">1.72</td>
+<td style="text-align: right;">1.73</td>
+<td style="text-align: right;">1.44</td>
+<td style="text-align: right;">1.32</td>
+<td style="text-align: right;">1.30</td>
+<td style="text-align: right;">1.19</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">1.24</td>
+<td style="text-align: right;">1.41</td>
+<td style="text-align: right;">1.32</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">1.03</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">0.818</td>
+<td style="text-align: right;">0.875</td>
+<td style="text-align: right;">0.945</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: right;">0.607</td>
+<td style="text-align: right;">0.693</td>
+<td style="text-align: right;">0.793</td>
+<td style="text-align: right;">0.798</td>
+<td style="text-align: right;">0.609</td>
+<td style="text-align: right;">0.492</td>
+<td style="text-align: right;">0.634</td>
+<td style="text-align: right;">0.428</td>
+<td style="text-align: right;">0.509</td>
+<td style="text-align: right;">0.369</td>
+<td style="text-align: right;">0.401</td>
+<td style="text-align: right;">0.402</td>
+<td style="text-align: right;">0.508</td>
+<td style="text-align: right;">0.417</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>The types of all of the columns seem correct: The country is represented as a character vector, and all of the actual murder rates are numerical. It doesn’t seem like we’ll need any particular cleaning, so we’ll go ahead and pivot our data.</p>
 <p>We want to pivot every column that isn’t the country into two columns: The year, and the murders per 100,000 in that country and that year.</p>
 <p>Additionally, we can convert the year to a number, and drop any rows that do not have an observation for the murders per 100,000.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>murders_clean <span class="ot">&lt;-</span> murders <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;murders_per_100000&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(murders_per_100000))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  country  year murders_per_100000
-  &lt;chr&gt;   &lt;dbl&gt;              &lt;dbl&gt;
-1 Albania  1987               1.49
-2 Albania  1988               1.62
-3 Albania  1989               2.4 
-4 Albania  1992               4.42
-5 Albania  1993               6.39
-6 Albania  1994               3.64</code></pre>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>murders_clean <span class="ot">&lt;-</span> murders <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;murders_per_100000&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(murders_per_100000))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_clean) <span class="sc">|&gt;</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ccc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">country</th>
+<th style="text-align: center;">year</th>
+<th style="text-align: center;">murders_per_100000</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1987</td>
+<td style="text-align: center;">1.49</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1988</td>
+<td style="text-align: center;">1.62</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1989</td>
+<td style="text-align: center;">2.40</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1992</td>
+<td style="text-align: center;">4.42</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1993</td>
+<td style="text-align: center;">6.39</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">1994</td>
+<td style="text-align: center;">3.64</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section>
@@ -3194,48 +3782,436 @@ vertical-align: -.125em;
 <p>Now that the murders data is clean and pivoted, what about the unemployment data?</p>
 <p>First, we should take a look at the data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 32
-  country  `1990` `1991` `1992` `1993` `1994` `1995` `1996` `1997` `1998` `1999`
-  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-1 Angola    NA     NA     NA     NA     NA     NA     NA     NA     NA     NA   
-2 Albania   NA     NA     NA     NA     NA     NA     NA     NA     NA     NA   
-3 UAE       NA     NA     NA     NA     NA     NA     NA     NA     NA     NA   
-4 Argenti…  NA     NA     NA     NA     NA     NA     NA     NA     NA     NA   
-5 Armenia   NA     NA     NA     NA     NA     NA     NA     NA     NA     NA   
-6 Austral…   1.24   1.85   2.14   2.14   1.93   1.73   1.72   1.68   1.57   1.37
-# ℹ 21 more variables: `2000` &lt;dbl&gt;, `2001` &lt;dbl&gt;, `2002` &lt;dbl&gt;, `2003` &lt;dbl&gt;,
-#   `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;, `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;,
-#   `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;,
-#   `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, `2018` &lt;dbl&gt;,
-#   `2019` &lt;dbl&gt;, `2020` &lt;dbl&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment) <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">country</th>
+<th style="text-align: right;">1990</th>
+<th style="text-align: right;">1991</th>
+<th style="text-align: right;">1992</th>
+<th style="text-align: right;">1993</th>
+<th style="text-align: right;">1994</th>
+<th style="text-align: right;">1995</th>
+<th style="text-align: right;">1996</th>
+<th style="text-align: right;">1997</th>
+<th style="text-align: right;">1998</th>
+<th style="text-align: right;">1999</th>
+<th style="text-align: right;">2000</th>
+<th style="text-align: right;">2001</th>
+<th style="text-align: right;">2002</th>
+<th style="text-align: right;">2003</th>
+<th style="text-align: right;">2004</th>
+<th style="text-align: right;">2005</th>
+<th style="text-align: right;">2006</th>
+<th style="text-align: right;">2007</th>
+<th style="text-align: right;">2008</th>
+<th style="text-align: right;">2009</th>
+<th style="text-align: right;">2010</th>
+<th style="text-align: right;">2011</th>
+<th style="text-align: right;">2012</th>
+<th style="text-align: right;">2013</th>
+<th style="text-align: right;">2014</th>
+<th style="text-align: right;">2015</th>
+<th style="text-align: right;">2016</th>
+<th style="text-align: right;">2017</th>
+<th style="text-align: right;">2018</th>
+<th style="text-align: right;">2019</th>
+<th style="text-align: right;">2020</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Angola</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">0.553</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.56</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Albania</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">5.270</td>
+<td style="text-align: right;">4.480</td>
+<td style="text-align: right;">4.890</td>
+<td style="text-align: right;">5.650</td>
+<td style="text-align: right;">5.28</td>
+<td style="text-align: right;">5.310</td>
+<td style="text-align: right;">5.560</td>
+<td style="text-align: right;">6.020</td>
+<td style="text-align: right;">6.23</td>
+<td style="text-align: right;">5.92</td>
+<td style="text-align: right;">5.22</td>
+<td style="text-align: right;">4.74</td>
+<td style="text-align: right;">4.25</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UAE</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.07</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.04</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Argentina</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.73</td>
+<td style="text-align: right;">1.40</td>
+<td style="text-align: right;">1.120</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">0.887</td>
+<td style="text-align: right;">0.933</td>
+<td style="text-align: right;">0.873</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">0.818</td>
+<td style="text-align: right;">0.805</td>
+<td style="text-align: right;">0.863</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.15</td>
+<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">1.44</td>
+<td style="text-align: right;">1.38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Armenia</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">3.170</td>
+<td style="text-align: right;">7.580</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">6.770</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">5.790</td>
+<td style="text-align: right;">7.750</td>
+<td style="text-align: right;">7.130</td>
+<td style="text-align: right;">7.09</td>
+<td style="text-align: right;">5.38</td>
+<td style="text-align: right;">5.08</td>
+<td style="text-align: right;">5.47</td>
+<td style="text-align: right;">5.29</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Australia</td>
+<td style="text-align: right;">1.24</td>
+<td style="text-align: right;">1.85</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">1.93</td>
+<td style="text-align: right;">1.73</td>
+<td style="text-align: right;">1.72</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">1.57</td>
+<td style="text-align: right;">1.37</td>
+<td style="text-align: right;">1.25</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">1.08</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">0.953</td>
+<td style="text-align: right;">0.887</td>
+<td style="text-align: right;">0.877</td>
+<td style="text-align: right;">1.140</td>
+<td style="text-align: right;">1.070</td>
+<td style="text-align: right;">1.06</td>
+<td style="text-align: right;">1.100</td>
+<td style="text-align: right;">1.160</td>
+<td style="text-align: right;">1.260</td>
+<td style="text-align: right;">1.27</td>
+<td style="text-align: right;">1.18</td>
+<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Similarly to the murders data, looks good from the start! We’ll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>unemployment_clean <span class="ot">&lt;-</span> unemployment <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;long_term_unemployment_rate&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(long_term_unemployment_rate))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  country  year long_term_unemployment_rate
-  &lt;chr&gt;   &lt;dbl&gt;                       &lt;dbl&gt;
-1 Angola   2009                       0.553
-2 Angola   2011                       1.56 
-3 Albania  2007                       5.27 
-4 Albania  2008                       4.48 
-5 Albania  2009                       4.89 
-6 Albania  2010                       5.65 </code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>unemployment_clean <span class="ot">&lt;-</span> unemployment <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;long_term_unemployment_rate&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(long_term_unemployment_rate))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment_clean) <span class="sc">|&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ccc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">country</th>
+<th style="text-align: center;">year</th>
+<th style="text-align: center;">long_term_unemployment_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Angola</td>
+<td style="text-align: center;">2009</td>
+<td style="text-align: center;">0.553</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Angola</td>
+<td style="text-align: center;">2011</td>
+<td style="text-align: center;">1.560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2007</td>
+<td style="text-align: center;">5.270</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2008</td>
+<td style="text-align: center;">4.480</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2009</td>
+<td style="text-align: center;">4.890</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2010</td>
+<td style="text-align: center;">5.650</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section>
 <section id="joining-datasets" class="level3">
 <h3 class="anchored" data-anchor-id="joining-datasets">Joining Datasets</h3>
-<p>Before we join the</p>
+<p>Before we join the two datasets, I’d like to make a note:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">&quot;Unemployment&quot;</span> <span class="ot">=</span> <span class="fu">range</span>(unemployment_clean<span class="sc">$</span>year),</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Murders&quot;</span> <span class="ot">=</span> <span class="fu">range</span>(murders_clean<span class="sc">$</span>year),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">row.names =</span> <span class="fu">c</span>(<span class="st">&quot;Earliest Observation&quot;</span>, <span class="st">&quot;Latest Observation&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Unemployment</th>
+<th style="text-align: right;">Murders</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Earliest Observation</td>
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">1950</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Latest Observation</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">2016</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As we can see from this table, the unemployment data only goes from 1990 to 2020, while the murders data spans all the way from 1950 to 2016. This means, after joining the two datasets, we will only be able to work with data from 1990 to 2016, or about 26 years worth of data. This shouldn’t have a huge impact on anything, but it’s good to keep in mind.</p>
+<p>Now that that’s out of the way, we can join the two datasets into one variable. One thing to keep in mind is that we’ll only be keeping year-country combinations that have an observation for both unemployment rate and murders per 100,000.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>murders_unemployment <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(murders_clean, unemployment_clean,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">join_by</span>(country <span class="sc">==</span> country, year <span class="sc">==</span> year))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_unemployment) <span class="sc">|&gt;</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;cccc&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">country</th>
+<th style="text-align: center;">year</th>
+<th style="text-align: center;">murders_per_100000</th>
+<th style="text-align: center;">long_term_unemployment_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2007</td>
+<td style="text-align: center;">3.07</td>
+<td style="text-align: center;">5.27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2008</td>
+<td style="text-align: center;">2.96</td>
+<td style="text-align: center;">4.48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Albania</td>
+<td style="text-align: center;">2010</td>
+<td style="text-align: center;">2.30</td>
+<td style="text-align: center;">5.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Armenia</td>
+<td style="text-align: center;">2008</td>
+<td style="text-align: center;">1.69</td>
+<td style="text-align: center;">7.58</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Armenia</td>
+<td style="text-align: center;">2012</td>
+<td style="text-align: center;">1.51</td>
+<td style="text-align: center;">5.79</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Armenia</td>
+<td style="text-align: center;">2013</td>
+<td style="text-align: center;">1.10</td>
+<td style="text-align: center;">7.75</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>There it is! We have our two datasets fully cleaned and joined into one table that we can continue to work with.</p>
 <!-- -->
 
 </section>
@@ -3711,90 +4687,123 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;STAT 331 Final Project&quot;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;Part 1&quot;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Charles Jansen, ...&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">    html-table-processing: none</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1: Project Proposal + Data</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Description</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="in"># Load necessary libraries here</span></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="in">library(knitr)</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data here</span></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;murder_per_100000_people.csv&quot;</span>)</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>unemployment <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;long_term_unemployment_rate_percent.csv&quot;</span>)</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>*Data description goes here...*</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>** VARIABLES ARE:</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>** LONG TERM EMPLOYMENT RATE (%)**</span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>** and MURDERS PER 100000 PEOPLE**</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cleaning Murders Data</span></span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>First, we&#39;ll start with the murders dataset. We can take a look to see if there&#39;s anything that clearly needs to change:</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders)</span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>The types of all of the columns seem correct: The country is represented as a character vector, and all of the actual murder rates are numerical. It doesn&#39;t seem like we&#39;ll need any particular cleaning, so we&#39;ll go ahead and pivot our data.</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>We want to pivot every column that isn&#39;t the country into two columns: The year, and the murders per 100,000 in that country and that year.</span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>Additionally, we can convert the year to a number, and drop any rows that do not have an observation for the murders per 100,000.</span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>murders_clean <span class="ot">&lt;-</span> murders <span class="sc">|&gt;</span> </span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;murders_per_100000&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(murders_per_100000))</span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_clean)</span>
-<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cleaning Unemployment Data</span></span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>Now that the murders data is clean and pivoted, what about the unemployment data?</span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>First, we should take a look at the data:</span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment)</span>
-<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>Similarly to the murders data, looks good from the start! We&#39;ll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.</span>
-<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>unemployment_clean <span class="ot">&lt;-</span> unemployment <span class="sc">|&gt;</span> </span>
-<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;long_term_unemployment_rate&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(long_term_unemployment_rate))</span>
-<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment_clean)</span>
-<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a><span class="fu">### Joining Datasets</span></span>
-<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>Before we join the</span>
+<div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;STAT 331 Final Project&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> &quot;Part 1&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Charles Jansen, ...&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: default</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code_fold: true</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: true</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1: Project Proposal + Data</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Description</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="in"># Load necessary libraries here</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="in">library(knitr)</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="in">library(kableExtra)</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data here</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;murder_per_100000_people.csv&quot;</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>unemployment <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;long_term_unemployment_rate_percent.csv&quot;</span>)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>*Data description goes here...*</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>**VARIABLES ARE:**</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>**LONG TERM EMPLOYMENT RATE (%)**</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>**and MURDERS PER 100000 PEOPLE**</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cleaning Murders Data</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>First, we&#39;ll start with the murders dataset. We can take a look to see if there&#39;s anything that clearly needs to change:</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders) <span class="sc">|&gt;</span> </span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>The types of all of the columns seem correct: The country is represented as a character vector, and all of the actual murder rates are numerical. It doesn&#39;t seem like we&#39;ll need any particular cleaning, so we&#39;ll go ahead and pivot our data.</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>We want to pivot every column that isn&#39;t the country into two columns: The year, and the murders per 100,000 in that country and that year.</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>Additionally, we can convert the year to a number, and drop any rows that do not have an observation for the murders per 100,000.</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>murders_clean <span class="ot">&lt;-</span> murders <span class="sc">|&gt;</span> </span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;murders_per_100000&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(murders_per_100000))</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_clean) <span class="sc">|&gt;</span> </span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ccc&quot;</span>)</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cleaning Unemployment Data</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>Now that the murders data is clean and pivoted, what about the unemployment data?</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>First, we should take a look at the data:</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment) <span class="sc">|&gt;</span> </span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>Similarly to the murders data, looks good from the start! We&#39;ll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>unemployment_clean <span class="ot">&lt;-</span> unemployment <span class="sc">|&gt;</span> </span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>country, <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;long_term_unemployment_rate&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(long_term_unemployment_rate))</span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(unemployment_clean) <span class="sc">|&gt;</span> </span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ccc&quot;</span>)</span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### Joining Datasets</span></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>Before we join the two datasets, I&#39;d like to make a note:</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">&quot;Unemployment&quot;</span> <span class="ot">=</span> <span class="fu">range</span>(unemployment_clean<span class="sc">$</span>year),</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Murders&quot;</span> <span class="ot">=</span> <span class="fu">range</span>(murders_clean<span class="sc">$</span>year),</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>           <span class="at">row.names =</span> <span class="fu">c</span>(<span class="st">&quot;Earliest Observation&quot;</span>, <span class="st">&quot;Latest Observation&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>As we can see from this table, the unemployment data only goes from 1990 to 2020, while the murders data spans all the way from 1950 to 2016. This means, after joining the two datasets, we will only be able to work with data from 1990 to 2016, or about 26 years worth of data. This shouldn&#39;t have a huge impact on anything, but it&#39;s good to keep in mind.</span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>Now that that&#39;s out of the way, we can join the two datasets into one variable. One thing to keep in mind is that we&#39;ll only be keeping year-country combinations that have an observation for both unemployment rate and murders per 100,000.</span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>murders_unemployment <span class="ot">&lt;-</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(murders_clean, unemployment_clean,</span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">join_by</span>(country <span class="sc">==</span> country, year <span class="sc">==</span> year))</span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(murders_unemployment) <span class="sc">|&gt;</span> </span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;cccc&quot;</span>)</span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>There it is! We have our two datasets fully cleaned and joined into one table that we can continue to work with.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
