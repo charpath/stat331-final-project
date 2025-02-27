@@ -36,16 +36,26 @@ unemployment <- read_csv("long_term_unemployment_rate_percent.csv")
 ** LONG TERM EMPLOYMENT RATE (%)**
 ** and MURDERS PER 100000 PEOPLE**
 
-### 1.1 Cleaning Data
+### Cleaning Murders Data
+
+First, we'll start with the murders dataset. We can take a look to see if there's anything that clearly needs to change:
 
 ```{r}
+head(murders)
+```
+The types of all of the columns seem correct: The country is represented as a character vector, and all of the actual murder rates are numerical. It doesn't seem like we'll need any particular cleaning, so we'll go ahead and pivot our data.
 
+We want to pivot every column that isn't the country into two columns: The year, and the murders per 100,000 in that country and that year.
+
+Additionally, we can convert the year to a number, and drop any rows that do not have an observation for the murders per 100,000.
+
+```{r}
+murders_clean <- murders |> 
+  pivot_longer(cols = !country, names_to = "year", values_to = "murders_per_100000") |> 
+  mutate(year = as.numeric(year)) |> 
+  filter(!is.na(murders_per_100000))
+
+head(murders_clean)
 ```
 
-### 1.2 Pivoting Longer
-
-*Pivot both datasets longer*
-
-### 1.3 Joining Datasets
-
-*Join both datasets here*
+### Cleaning 
