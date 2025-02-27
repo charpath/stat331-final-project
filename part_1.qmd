@@ -1,14 +1,14 @@
 ---
 title: "STAT 331 Final Project"
 subtitle: "Part 1"
-author: "Charles Jansen, ..."
+author: "Charles Jansen, Stanley Lam"
 format: 
   html:
     theme: default
     code-tools: true
     toc: true
     embed-resources: true
-    code_fold: true
+    code-fold: true
 execute: 
   echo: true
   eval: true
