@@ -1,0 +1,51 @@
+---
+title: "STAT 331 Final Project"
+subtitle: "Part 1"
+author: "Charles Jansen, ..."
+format: 
+  html:
+    code-tools: true
+    toc: true
+    embed-resources: true
+    html-table-processing: none
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+---
+
+## Part 1: Project Proposal + Data
+
+### Data Description
+
+```{r setup}
+# Load necessary libraries here
+library(tidyverse)
+library(knitr)
+```
+
+```{r}
+# Load data here
+murders <- read_csv("murder_per_100000_people.csv")
+unemployment <- read_csv("long_term_unemployment_rate_percent.csv")
+```
+
+*Data description goes here...*
+** VARIABLES ARE:
+** LONG TERM EMPLOYMENT RATE (%)**
+** and MURDERS PER 100000 PEOPLE**
+
+### 1.1 Cleaning Data
+
+```{r}
+
+```
+
+### 1.2 Pivoting Longer
+
+*Pivot both datasets longer*
+
+### 1.3 Joining Datasets
+
+*Join both datasets here*
