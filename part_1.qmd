@@ -58,4 +58,27 @@ murders_clean <- murders |>
 head(murders_clean)
 ```
 
-### Cleaning 
+### Cleaning Unemployment Data
+
+Now that the murders data is clean and pivoted, what about the unemployment data?
+
+First, we should take a look at the data:
+
+```{r}
+head(unemployment)
+```
+
+Similarly to the murders data, looks good from the start! We'll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.
+
+```{r}
+unemployment_clean <- unemployment |> 
+  pivot_longer(cols = !country, names_to = "year", values_to = "long_term_unemployment_rate") |> 
+  mutate(year = as.numeric(year)) |> 
+  filter(!is.na(long_term_unemployment_rate))
+
+head(unemployment_clean)
+```
+
+### Joining Datasets
+
+Before we join the
