@@ -34,19 +34,13 @@ murders <- read_csv("murder_per_100000_people.csv")
 unemployment <- read_csv("long_term_unemployment_rate_percent.csv")
 ```
 
-The data used in this analysis originates from the Gapminder Foundation, an independent educational non-profit organization dedicated to fighting global misconceptions. We have specifically utilized two datasets from their collection: "Murder per 100,000 People" and "Long-Term Unemployment Rate". These datasets provide insights into societal trends across various countries over time.
+The data used in this analysis originates from the Gapminder Foundation, an independent educational non-profit organization dedicated to fighting global misconceptions. We have specifically utilized two datasets from their collection: "Murders per 100,000 People" and "Long-Term Unemployment Rate". These datasets provide insights into societal trends across various countries over time.
 
-##### "Murder per 100,000 People" Dataset 
+##### "Murders per 100,000 People" Dataset 
 This dataset contains the annual number of murders per 100,000 people for various countries, spanning from 1950 to 2016. It offers a measure of violent crime rates, providing a crucial indicator of societal safety and stability.
 
 ##### "Long-Term Unemployment Rate (Percentage)" Dataset
 This dataset presents the annual long-term unemployment rate as a percentage of the labor force for various countries, covering the period from 1990 to 2020. Long-term unemployment is defined as individuals who have been unemployed for a year or longer. This metric serves as an indicator of economic health and labor market stability.
-
-**VARIABLES ARE:**
-
-**LONG TERM EMPLOYMENT RATE (%)** - Represents the percentage of the labor force that has been unemployed for a year or more.
-
-**MURDERS PER 100,000 PEOPLE** - Represents the number of murders per 100,000 individuals in a given population.
 
 These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence.
 
