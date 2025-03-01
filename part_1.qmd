@@ -1,7 +1,7 @@
 ---
 title: "STAT 331 Final Project"
 subtitle: "Part 1"
-author: "Charles Jansen, Stanley Lam"
+author: "Charles Jansen, Stanley Lam, Minh Ho-Hoang"
 format: 
   html:
     theme: default
