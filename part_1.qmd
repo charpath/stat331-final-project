@@ -124,3 +124,25 @@ head(murders_unemployment) |>
 ```
 
 There it is! We have our two datasets fully cleaned and joined into one table that we can continue to work with.
+
+## Part 2: Data Visualization & Linear Regression Model
+
+First, let's take a look at the relationship between murders and unemployment to see if we could potentially fit a linear regression model for these two quantitative variables. 
+
+```{r}
+murders_unemployment_2013 <- murders_unemployment |>
+  filter(year == 2013)
+
+murders_unemployment_2013 |>
+  ggplot(aes(x = long_term_unemployment_rate,
+             y = murders_per_100000)) +
+  geom_jitter() +
+  labs(title = "Relationship Between Unemployment and Murder in Different Countries in 2013",
+       subtitle = "Murders (1 per 100,000)",
+       x = "Long Term Unemployment Rate") +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10))
+```
+
