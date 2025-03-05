@@ -55,12 +55,7 @@ These datasets were chosen to explore the potential relationship between long-te
 
 ### Cleaning Murders Data
 
-First, we'll start with the murders dataset. We can take a look to see if there's anything that clearly needs to change:
-
-```{r}
-head(murders) |> 
-  kable()
-```
+First, we'll start with the murders dataset. 
 
 The types of all of the columns seem correct: The country is represented as a character vector, and all of the actual murder rates are numerical. It doesn't seem like we'll need any particular cleaning, so we'll go ahead and pivot our data.
 
@@ -82,14 +77,7 @@ head(murders_clean) |>
 
 Now that the murders data is clean and pivoted, what about the unemployment data?
 
-First, we should take a look at the data:
-
-```{r}
-head(unemployment) |> 
-  kable()
-```
-
-Similarly to the murders data, looks good from the start! We'll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.
+Similarly to the murders data, it looks good from the start. We'll do the exact same thing to this data as we did to the murders data: Pivot all of the observation columns into one year column and one unemployment rate column, then convert year to a number and drop all missing observations.
 
 ```{r}
 unemployment_clean <- unemployment |> 
