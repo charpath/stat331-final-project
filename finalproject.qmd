@@ -1,7 +1,7 @@
 ---
 title: "STAT 331 Final Project"
 subtitle: "Project"
-author: "Charles Jansen, Stanley Lam, Minh Ho-Hoang"
+author: "Charles Jansen, Stanley Lam, Minh Ho-Hoang, James Lamkin"
 format: 
   html:
     theme: default
@@ -149,14 +149,14 @@ murders_unemployment |>
         axis.text.y = element_text(size = 10))
 ```
 
-When looking at the linear regression, it appears that there is a weak negative correlation between unemployment rate and murder rate. There is also multiple outliers, on the top of the scatterplot where murder rates are rampant. Now we will compare these values overtime to see if anything has changed over the years.
+When looking at the linear regression, it appears that there is a weak negative correlation between unemployment rate and murder rate. There is also multiple outliers, on the top of the scatterplot where murder rates are rampant. Now we will compare these values over time to see if anything has changed over the years.
 
 ```{r}
 anim <- murders_unemployment |>
   ggplot(aes(x = long_term_unemployment_rate, y = murders_per_100000)) +
   geom_point(size = 3) + 
   labs(title = "Year: {frame_time}",
-       x = "Unemployment Rate (%)", y = "Murder (per 100,000") +
+       x = "Unemployment Rate (%)", y = "Murder (per 100,000)") +
   transition_time(year) +
   ease_aes("linear")
 
@@ -165,7 +165,28 @@ animate(anim, renderer = gifski_renderer())
 
 From the animated visual, there is not much we describe about the relationship between unemployment rate and murder rate. However, we are able to depict murder rate and unemployment rate seperately. In the late 1990s, we see murder rate spike up and gradually decrease as we enter the new millennium. And as the 2008 recession starts to hit, we see unemployment rate spike up for a couple of years.  
 
+### Linear Regression
 
+Now that we've been able to take a look at a visual, let's see if we can fit a linear regression model to predict the murders per 100,000 based on the unemployment rate. In this case, murders per 100,000 will be our response variable, and unemployment rate will be our explanatory variable.
 
+First, in order to make fitting the model slightly easier, we're going to condense each country's observations down into one row by taking the median value of the observations. 
 
->>>>>>> d53b2bf8247bd713afdd3f04c1029415e25693bd:finalproject.qmd
+```{r}
+lr_murders_unemployment <- murders_unemployment |> 
+  group_by(country) |> 
+  summarize(med_murders_per_100000 = median(murders_per_100000),
+            med_unemployment = median(long_term_unemployment_rate))
+```
+
+Now that we have our condensed data, we can go ahead and fit the model:
+
+```{r}
+mu_model <- lm(med_murders_per_100000~med_unemployment, data = lr_murders_unemployment)
+broom::tidy(mu_model) |> 
+  kable()
+```
+Looking at broom's tidy output, we can see that the prediction equation of our model is as follows:
+
+$\widehat{Median\ Murders\ per\ 100,000}\ =\ 2.941\ -\ 0.045(Median\ Unemployment)$
+
+The intercept is 2.941, meaning when unemployment rate is at 0%, we expect to have 2.941 murders per 100,000. The coefficient of Median Unemployment Rate is -0.045, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to decrease by 0.045.
