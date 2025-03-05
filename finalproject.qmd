@@ -143,7 +143,7 @@ When looking at the linear regression, it appears that there is a weak negative 
 anim <- murders_unemployment |>
   ggplot(aes(x = long_term_unemployment_rate, y = murders_per_100000)) +
   geom_point(size = 3) + 
-  labs(title = "Year: {frame_time}",
+  labs(title = "Year: {round(frame_time)}",
        x = "Unemployment Rate (%)", y = "Murder (per 100,000)") +
   transition_time(year) +
   ease_aes("linear")
@@ -178,3 +178,17 @@ Looking at broom's tidy output, we can see that the prediction equation of our m
 $\widehat{Median\ Murders\ per\ 100,000}\ =\ 2.941\ -\ 0.045(Median\ Unemployment)$
 
 The intercept is 2.941, meaning when unemployment rate is at 0%, we expect to have 2.941 murders per 100,000. The coefficient of Median Unemployment Rate is -0.045, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to decrease by 0.045.
+
+### Model Fit
+
+```{r}
+mu_lm <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment)
+
+#I got the values for the fitted and residuals, just need to find variance and put into table
+#along with the varaince in our response variable
+fitted_resid <- broom::augment(mu_lm) |>
+  select(.fitted, .resid)
+
+#head(fitted_resid)
+```
+
