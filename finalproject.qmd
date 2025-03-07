@@ -187,8 +187,21 @@ mu_lm <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_une
 #I got the values for the fitted and residuals, just need to find variance and put into table
 #along with the varaince in our response variable
 fitted_resid <- broom::augment(mu_lm) |>
-  select(.fitted, .resid)
+  select(.fitted, .resid) |>
+  summarize(across(everything(), var, .names = "variance_{col}")) |>
+  pivot_longer(cols = everything(),
+               names_to = "Variance_Type",
+               values_to = "Variance") |>
+  mutate(Variance_Type = case_when(Variance_Type == "variance_.fitted" ~ "Fitted Values",
+                                   Variance_Type == "variance_.resid" ~ "Residuals"))
 
-#head(fitted_resid)
+fitted_resid |>
+  kable(col.names = c("Variance Type", "Variance"),
+        caption = "Variation of Different Values",
+        digits = c(0, 2)) |>
+  kable_classic(full_width = F,
+                bootstrap_options = "striped") |> 
+  row_spec(row = 0, bold = T, align = "c")
+
 ```
 
