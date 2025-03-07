@@ -181,27 +181,33 @@ The intercept is 2.941, meaning when unemployment rate is at 0%, we expect to ha
 
 ### Model Fit
 
+Now lets look at how well a linear model fits our data. We can find out by calculating the variation in our response variable (murder per 100,000), the fitted model values and residuals. 
+
 ```{r}
 mu_lm <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment)
 
 #I got the values for the fitted and residuals, just need to find variance and put into table
 #along with the varaince in our response variable
+unempolyment_col <- select(murders_unemployment, murders_per_100000)
 fitted_resid <- broom::augment(mu_lm) |>
   select(.fitted, .resid) |>
+  bind_cols(unempolyment_col) |>
   summarize(across(everything(), var, .names = "variance_{col}")) |>
   pivot_longer(cols = everything(),
                names_to = "Variance_Type",
                values_to = "Variance") |>
   mutate(Variance_Type = case_when(Variance_Type == "variance_.fitted" ~ "Fitted Values",
-                                   Variance_Type == "variance_.resid" ~ "Residuals"))
+                                   Variance_Type == "variance_.resid" ~ "Residuals",
+                                   Variance_Type == "variance_murders_per_100000" ~ "Response Variable"))
 
 fitted_resid |>
   kable(col.names = c("Variance Type", "Variance"),
         caption = "Variation of Different Values",
-        digits = c(0, 2)) |>
+        digits = c(0, 3)) |>
   kable_classic(full_width = F,
                 bootstrap_options = "striped") |> 
   row_spec(row = 0, bold = T, align = "c")
 
 ```
 
+If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data. 
