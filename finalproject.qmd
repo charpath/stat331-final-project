@@ -4,6 +4,7 @@ subtitle: "Project"
 author: "Charles Jansen, Stanley Lam, Minh Ho-Hoang, James Lamkin"
 format: 
   html:
+    html-table-processing: none
     theme: default
     code-tools: true
     toc: true
