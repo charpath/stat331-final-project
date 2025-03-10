@@ -1,6 +1,6 @@
 ---
 title: "STAT 331 Final Project"
-subtitle: "Project"
+subtitle: "GitHub: https://github.com/charpath/stat331-final-project"
 author: "Charles Jansen, Stanley Lam, Minh Ho-Hoang, James Lamkin"
 format: 
   html:
