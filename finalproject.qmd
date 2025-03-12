@@ -51,7 +51,7 @@ This dataset presents the annual long-term unemployment rate as a percentage of 
 
 **MURDERS PER 100,000 PEOPLE** - Represents the number of murders per 100,000 individuals in a given population.
 
-These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence.
+These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence — in this case murder.
 
 
 ### Cleaning Murders Data
@@ -243,15 +243,19 @@ r_squared
 simulation |>
   ggplot(aes(x = sim_murder, y = murders_per_100000)) +
   geom_point() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  labs(x = "Simulated Murder per 100000", y = "Murder per 100000",
+       title = "Our Simulated Data VS Observed")
 
 simulation |>
   ggplot(aes(x = year, y = murders_per_100000)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Observed Data Over Time (1990-2016")
 
 simulation |>
   ggplot(aes(x = year, y = sim_murder)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Simulated Data Over Time (1990-2016")
 ```
 
 
