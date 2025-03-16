@@ -51,7 +51,7 @@ This dataset presents the annual long-term unemployment rate as a percentage of 
 
 **MURDERS PER 100,000 PEOPLE** - Represents the number of murders per 100,000 individuals in a given population.
 
-These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence.
+These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence — in this case murder.
 
 
 ### Cleaning Murders Data
@@ -212,3 +212,79 @@ fitted_resid |>
 ```
 
 If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data. 
+
+## Simulation
+```{r}
+mod <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment)
+
+pred_murder <- predict(mod)
+
+est_sigma <- sigma(mod)
+
+#function for error
+rand_error <- function(x, mean = 0, sd){
+  
+  error <- rnorm(length(x), mean, sd)
+  
+  return(x + error)
+}
+
+sim_response <- tibble(sim_murder = rand_error(pred_murder, sd = est_sigma))
+
+simulation <- murders_unemployment |>
+  bind_cols(sim_response)
+
+mod2 <- lm(sim_murder ~ murders_per_100000, data = simulation)
+r_squared <- summary(mod2)$r.squared
+r_squared
+```
+
+```{r}
+simulation |>
+  ggplot(aes(x = sim_murder, y = murders_per_100000)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Simulated Murder per 100000", y = "Murder per 100000",
+       title = "Our Simulated Data VS Observed")
+
+simulation |>
+  ggplot(aes(x = year, y = murders_per_100000)) +
+  geom_point() +
+  labs(title = "Observed Data Over Time (1990-2016")
+
+simulation |>
+  ggplot(aes(x = year, y = sim_murder)) +
+  geom_point() +
+  labs(title = "Simulated Data Over Time (1990-2016")
+```
+
+```{r}
+num_simulations <- 1000
+simulated_r_squared <- numeric(num_simulations)
+
+for(i in 1:num_simulations){
+  sim_response <- tibble(sim_murder = rand_error(pred_murder, sd = est_sigma))
+  
+  simulation <- murders_unemployment %>%
+    bind_cols(sim_response)
+  
+  # Remove rows containing NAs
+  complete_data <- simulation %>% 
+    filter(complete.cases(.)) 
+  
+  mod2 <- lm(murders_per_100000 ~ sim_murder, data = complete_data)
+  simulated_r_squared[i] <- summary(mod2)$r.squared
+}
+
+# Plot the distribution of r squared values
+sim_r_sq_df <- data.frame(r_squared = simulated_r_squared) 
+
+# Original r squared
+original_r_squared <- summary(mod)$r.squared
+
+ggplot(sim_r_sq_df, aes(x = r_squared)) +
+  geom_histogram(bins = 20) +
+  geom_vline(aes(xintercept = original_r_squared), color = 'red') +
+  labs(title = "Distribution of R-squared Values", caption = "*Red line represents original R-squared value", x = "R-squared", y = "Frequnecy") +
+  theme_minimal()
+```
