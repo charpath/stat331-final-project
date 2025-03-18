@@ -116,8 +116,6 @@ head(murders_unemployment) |>
 
 There it is! We have our two datasets fully cleaned and joined into one table that we can continue to work with.
 
-=======
-
 ## Part 2: Linear Regression
 
 With the clean data, we will now compare the relationship between our two quantitative variables using a scatterplot. Unemployment will be our explanatory variable, while murder will be our response variable.
@@ -211,13 +209,28 @@ fitted_resid |>
 
 ```
 
-If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data. 
+If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data and that we might have to transform our data to fit a linear model. 
 
 ## Simulation
 
 ### Visualizing Simulations
 ```{r}
-mod <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment)
+murders_unemployment_log <- murders_unemployment |>
+  mutate(murders_per_100000 = log(murders_per_100000 + 1))
+
+murders_unemployment |>
+  ggplot(aes(x = long_term_unemployment_rate, y = log(murders_per_100000 + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Relationship Between Murder and Unemployment in Different Countries (1990 - 2016)",
+       x = "Unemployment Rate (%)",
+       subtitle = "Murder (1 per 100,000)") +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10))
+
+mod <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment_log)
 
 pred_murder <- predict(mod)
 
@@ -246,7 +259,7 @@ simulation |>
   ggplot(aes(x = sim_murder, y = murders_per_100000)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(x = "Simulated Murder per 100000", y = "Murder per 100000",
+  labs(x = "Simulated Murder per 100000", y = "Observed Murder per 100000",
        title = "Our Simulated Data VS Observed")
 
 simulation |>
