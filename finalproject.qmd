@@ -213,9 +213,14 @@ If the variance of the response variable represents the total amount of variabil
 
 ## Simulation
 
+Regardless, for the sake of the report, we will try to simulate what our outcomes should look like if it were a linear relationship. 
+
 ### Visualizing Simulations
+
+First, we will simulate sampling the data as if the data was linear with residuals that follow a normal distribution. Then we'll extract $R^2$ to find out the strength of the relationship between our simulated data and our observed data. 
+
 ```{r}
-mod <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment_log)
+mod <- lm(murders_per_100000 ~ long_term_unemployment_rate, data = murders_unemployment)
 
 pred_murder <- predict(mod)
 
@@ -239,6 +244,8 @@ r_squared <- summary(mod2)$r.squared
 r_squared
 ```
 
+The $R^2$ is roughly 0 meaning that there is little to no relationship between our simulated data and our observed data. Our simulated data is not a good representation of our observed data. 
+
 ```{r}
 simulation |>
   ggplot(aes(x = sim_murder, y = murders_per_100000)) +
@@ -246,7 +253,8 @@ simulation |>
   geom_smooth(method = "lm") +
   labs(x = "Simulated Murder per 100000", y = "Observed Murder per 100000",
        title = "Our Simulated Data VS Observed")
-
+```
+```{r}
 simulation |>
   ggplot(aes(x = year, y = murders_per_100000)) +
   geom_point() +
