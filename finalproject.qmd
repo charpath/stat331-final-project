@@ -209,7 +209,7 @@ fitted_resid |>
 
 ```
 
-If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data and that we might have to transform our data to fit a linear model.
+If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.1% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data and that we might not even be able to fit a linear model because there is no relationship between the two variables.
 
 ## Simulation
 
