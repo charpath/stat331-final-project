@@ -87,7 +87,8 @@ Before we join the two datasets, I'd like to make a note:
 data.frame("Unemployment" = range(unemployment_clean$year),
            "Murders" = range(murders_clean$year),
            row.names = c("Earliest Observation", "Latest Observation")) |> 
-  kable()
+  kable() |> 
+  kable_styling(full_width = F)
 ```
 
 As we can see from this table, the unemployment data only goes from 1990 to 2020, while the murders data spans all the way from 1950 to 2016. This means, after joining the two datasets, we will only be able to work with data from 1990 to 2016, or about 26 years worth of data. This shouldn't have a huge impact on anything, but it's good to keep in mind.
@@ -113,9 +114,10 @@ murders_unemployment |>
   ggplot(aes(x = long_term_unemployment_rate, y = murders_per_100000)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(title = "Relationship Between Murder and Unemployment Rates in Different Countries (1990 - 2016)",
+  labs(title = "Relationship Between Murder and Unemployment Rates in Different Countries
+(1990 - 2016)",
        x = "Unemployment Rate (%)",
-       subtitle = "Murder (1 per 100,000)") +
+       subtitle = "Murders (per 100,000)") +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_text(size = 12),
         axis.text.x = element_text(size = 10),
@@ -142,32 +144,48 @@ From the animated visual, there is not much we can describe about the relationsh
 
 Now that we've been able to take a look at a visual, let's see if we can fit a linear regression model to predict the murders per 100,000 based on the unemployment rate. Just like before, murders per 100,000 will be our response variable, and unemployment rate will be our explanatory variable.
 
-First, in order to make fitting the model slightly easier, we're going to condense each country's observations down into one row by taking the median value of the observations and taking the log of our observations.  
+First, in order to make fitting the model slightly easier, we're going to condense each country's observations down into one row by taking the median value of the observations and taking the natural log of our observations.  
 
 ```{r}
 lr_murders_unemployment <- murders_unemployment |> 
   group_by(country) |> 
   summarize(med_murders_per_100000 = median(murders_per_100000),
             med_unemployment = median(long_term_unemployment_rate)) |>
-  mutate(med_murders_per_100000 = log(med_murders_per_100000))
+  mutate(ln_med_murders_per_100000 = log(med_murders_per_100000))
 ```
 
-Now that we have our condensed data, we can go ahead and fit the model:
+Now that we have our condensed data, we should plot it before we actually fit the model. The following plot shows our condensed data, with each point representing one country's median murder and unemployment rates across all of the years in the data. 
 
 ```{r}
-mu_model <- lm(med_murders_per_100000~med_unemployment, data = lr_murders_unemployment)
+lr_murders_unemployment |> 
+  ggplot(mapping = aes(x = med_unemployment, y = ln_med_murders_per_100000)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Relationship Between Median Murder and Unemployment Rates in Different Countries",
+       x = "Unemployment Rate (%)",
+       subtitle = "ln(Murders (per 100,000))") +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10))
+```
+
+As we can see from this plot, there doesn't seem to be very much of a relationship between the two variables. 
+
+```{r}
+mu_model <- lm(ln_med_murders_per_100000~med_unemployment, data = lr_murders_unemployment)
 broom::tidy(mu_model) |> 
   kable()
 ```
 Looking at broom's tidy output, we can see that the prediction equation of our model is as follows:
 
-$\widehat{Median\ Murders\ per\ 100,000}\ =\ 0.0293\ -\ 0.339(Median\ Unemployment)$
+$$\widehat{\ln(Median\ Murders\ per\ 100,000)}\ =\ 0.339\ -\ 0.0293(Median\ Unemployment)$$
 
-The intercept is 0.339, meaning when unemployment rate is at 0%, we expect to have $e^{0.339}$ or 1.4 murders per 100,000. The coefficient of Median Unemployment Rate is 0.0293, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to increase by $e^{0.0293}$ or roughly 1 person per 100,000.
+The intercept is 0.339, meaning when unemployment rate is at 0%, we expect to have $e^{0.339}$ or 1.4 murders per 100,000. The coefficient of Median Unemployment Rate is 0.0293, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to increase by a factor of $e^{0.0293}$.
 
 ### Model Fit
 
-Now lets look at how well a linear model fits our data. We can find out by calculating the variation in our response variable (murders per 100,000), the fitted model values and residuals. 
+Now let's look at how well a linear model fits our data. We can find out by calculating the variation in our response variable (murders per 100,000), the fitted model values and residuals. 
 
 ```{r}
 observation_col <- select(lr_murders_unemployment, med_murders_per_100000)
