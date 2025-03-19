@@ -140,7 +140,6 @@ murders_unemployment |>
 When looking at the linear regression, it appears that there is a weak negative linear relationship between unemployment rate and murder rate. There is also multiple outliers, on the top of the scatterplot where murder rates are rampant. Now we will compare these values over time to see if anything has changed over the years.
 
 ```{r}
-#| eval: false
 anim <- murders_unemployment |>
   ggplot(aes(x = long_term_unemployment_rate, y = murders_per_100000)) +
   geom_point(size = 3) + 
@@ -196,7 +195,7 @@ fitted_resid <- broom::augment(mu_model) |>
                values_to = "Variance") |>
   mutate(Variance_Type = case_when(Variance_Type == "variance_.fitted" ~ "Fitted Values",
                                    Variance_Type == "variance_.resid" ~ "Residuals",
-                                   Variance_Type == "variance_murders_per_100000" ~ "Response Variable"))
+                                   Variance_Type == "variance_med_murders_per_100000" ~ "Response Variable"))
 
 fitted_resid |>
   kable(col.names = c("Variance Type", "Variance"),
@@ -223,7 +222,6 @@ pred_murder <- predict(mu_model)
 
 est_sigma <- sigma(mu_model)
 
-#function for error
 rand_error <- function(x, mean = 0, sd){
   
   error <- rnorm(length(x), mean, sd)
@@ -241,7 +239,7 @@ r_squared <- summary(mod2)$r.squared
 r_squared
 ```
 
-The $R^2$ is 0.002 meaning that virtually none of the variability in our observed data is explained by our simulation results. Our simulated data is not a good explanation of our observed data. 
+The $R^2$ is `r round(r_squared, 4)` meaning that virtually none of the variability in our observed data is explained by or simulation results. Our simulated data is not a good explanation of our observed data. 
 
 ```{r}
 simulation |>
@@ -266,9 +264,11 @@ simulation |>
   labs(title = "Simulated Data Across Countries")
 ```
 
-The relationship between the observed murder rate and simulated murder rate to unemployment looks quite different.
+The relationship between the observed murder rate and simulated murder rate to unemployment looks quite different hence the low $R^2$ value. Our simulated data looks more scattered than our observed data however, both data was clustered to the left since we don't have many countries with consistantly high unemployment.
 
 ### Generating Multiple Predictive Checks
+
+We only looked at one simulation and discussed one $R^2$ value. That one $R^2$ value only told us if that one perticular simulation was a good model to explain our observations. We don't know if that simulation was a typical simulation or we got really unlucky and generated a really unusual simulation. So, we need to generate many more simulations to compare to our observed data to create a distribution of $R^2$ values. This will allow us to find out what is an average $R^2$ value and based on that value, how well does simulated data explain our observations on avgerage.
 
 ```{r}
 num_simulations <- 1000
@@ -280,19 +280,16 @@ for(i in 1:num_simulations){
   simulation <- lr_murders_unemployment %>%
     bind_cols(sim_response)
   
-  # Remove rows containing NAs
   complete_data <- simulation %>% 
     filter(complete.cases(.)) 
   
-  mod2 <- lm(med_murders_per_100000 ~ sim_murder, data = complete_data)
-  simulated_r_squared[i] <- summary(mod2)$r.squared
+  sim_obs_model <- lm(med_murders_per_100000 ~ sim_murder, data = complete_data)
+  simulated_r_squared[i] <- summary(sim_obs_model)$r.squared
 }
 
-# Plot the distribution of r squared values
 sim_r_sq_df <- data.frame(r_squared = simulated_r_squared) 
 
-# Original r squared
-original_r_squared <- summary(mod)$r.squared
+original_r_squared <- summary(mu_model)$r.squared
 
 ggplot(sim_r_sq_df, aes(x = r_squared)) +
   geom_histogram(bins = 20) +
@@ -300,3 +297,4 @@ ggplot(sim_r_sq_df, aes(x = r_squared)) +
   labs(title = "Distribution of R-squared Values", caption = "*Red line represents original R-squared value", x = "R-squared", y = "Frequnecy") +
   theme_minimal()
 ```
+This is 1,000 $R^2$ values ploted on a plot. It is skewed to the left with our first $R^2$ value being close to the skew meaning that we were not unlucky with our first simulation and that typically, simulation does a poor job at explaining our observations. Our observations does not follow a linear model even after a transformation meaning our two variables are likely not related to one another. 
