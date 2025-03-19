@@ -144,7 +144,9 @@ From the animated visual, there is not much we can describe about the relationsh
 
 Now that we've been able to take a look at a visual, let's see if we can fit a linear regression model to predict the murders per 100,000 based on the unemployment rate. Just like before, murders per 100,000 will be our response variable, and unemployment rate will be our explanatory variable.
 
-First, in order to make fitting the model slightly easier, we're going to condense each country's observations down into one row by taking the median value of the observations and taking the natural log of our observations.  
+First, in order to make fitting the model slightly easier, we're going to condense each country's observations down into one row by taking the median value of the observations and taking the natural log of our observations.
+
+We transformed the response variable because the data didn't seem to be quite linear, and a logarithm seemed like it would work because it has a greater effect on the larger values (which were the ones we had an issue with).
 
 ```{r}
 lr_murders_unemployment <- murders_unemployment |> 
@@ -170,7 +172,7 @@ lr_murders_unemployment |>
         axis.text.y = element_text(size = 10))
 ```
 
-As we can see from this plot, there doesn't seem to be very much of a relationship between the two variables. 
+As we can see from this plot, there doesn't seem to be very much of a relationship between the two variables. But, we're still going to fit a linear regression model on the data.
 
 ```{r}
 mu_model <- lm(ln_med_murders_per_100000~med_unemployment, data = lr_murders_unemployment)
@@ -181,7 +183,7 @@ Looking at broom's tidy output, we can see that the prediction equation of our m
 
 $$\widehat{\ln(Median\ Murders\ per\ 100,000)}\ =\ 0.339\ -\ 0.0293(Median\ Unemployment)$$
 
-The intercept is 0.339, meaning when unemployment rate is at 0%, we expect to have $e^{0.339}$ or 1.4 murders per 100,000. The coefficient of Median Unemployment Rate is 0.0293, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to increase by a factor of $e^{0.0293}$.
+The intercept is 0.339, meaning when unemployment rate is at 0%, we expect to have $e^{0.339}$ or 1.4 murders per 100,000. The coefficient of Median Unemployment Rate is 0.0293, so for each 1% unemployment rate increases by in a country, we expect the murders per 100,000 to increase by a factor of $e^{0.0293}$, or about 1.03 times the previous value.
 
 ### Model Fit
 
@@ -300,4 +302,6 @@ ggplot(sim_r_sq_df, aes(x = r_squared)) +
   labs(title = "Distribution of R-squared Values", caption = "*Red line represents original R-squared value", x = "R-squared", y = "Frequnecy") +
   theme_minimal()
 ```
-This is 1,000 $R^2$ values ploted on a plot. It is skewed to the left with our first $R^2$ value being close to the skew meaning that we were not unlucky with our first simulation and that typically, simulation does a poor job at explaining our observations. Our observations does not follow a linear model even after a transformation meaning our two variables are likely not related to one another. 
+This is 1,000 $R^2$ values ploted on a plot. It is skewed to the left with our first $R^2$ value being close to the skew meaning that we were not unlucky with our first simulation and that typically, simulation does a poor job at explaining our observations. Our observations does not follow a linear model even after a transformation meaning our two variables are likely not related to one another.
+
+## Conclusion
