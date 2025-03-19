@@ -38,21 +38,15 @@ unemployment <- read_csv("long_term_unemployment_rate_percent.csv")
 set.seed(331)
 ```
 
-The data used in this analysis originates from the Gapminder Foundation, an independent educational non-profit organization dedicated to fighting global misconceptions. We have specifically utilized two datasets from their collection: "Murder per 100,000 People" and "Long-Term Unemployment Rate". These datasets provide insights into societal trends across various countries over time.
+The data used in this analysis originates from the Gapminder Foundation, an independent educational non-profit organization dedicated to fighting global misconceptions. We have specifically utilized two datasets from their collection: "Murders per 100,000 People" and "Long-Term Unemployment Rate". These datasets provide insights into societal trends across various countries over time.
 
-##### "Murder per 100,000 People" Dataset 
+##### "Murders per 100,000 People" Dataset 
 This dataset contains the annual number of murders per 100,000 people for various countries, spanning from 1950 to 2016. It offers a measure of violent crime rates, providing a crucial indicator of societal safety and stability.
 
 ##### "Long-Term Unemployment Rate (Percentage)" Dataset
 This dataset presents the annual long-term unemployment rate as a percentage of the labor force for various countries, covering the period from 1990 to 2020. Long-term unemployment is defined as individuals who have been unemployed for a year or longer. This metric serves as an indicator of economic health and labor market stability.
 
-**VARIABLES ARE:**
-
-**LONG TERM EMPLOYMENT RATE (%)** - Represents the percentage of the labor force that has been unemployed for a year or more.
-
-**MURDERS PER 100,000 PEOPLE** - Represents the number of murders per 100,000 individuals in a given population.
-
-These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence — in this case murder.
+These datasets were chosen to explore the potential relationship between long-term unemployment rates and murder rates. The hypothesis is that economic factors, such as long-term unemployment, may correlate with societal indicators of violence — in this case murder. So, we hypothesize that an increase in unemployment rates will likely also lead to an increase in murder rates.
 
 
 ### Cleaning Murders Data
@@ -70,9 +64,6 @@ murders_clean <- murders |>
   pivot_longer(cols = !country, names_to = "year", values_to = "murders_per_100000") |> 
   mutate(year = as.numeric(year)) |> 
   filter(!is.na(murders_per_100000))
-
-head(murders_clean) |> 
-  kable(align = "ccc")
 ```
 
 ### Cleaning Unemployment Data
@@ -86,9 +77,6 @@ unemployment_clean <- unemployment |>
   pivot_longer(cols = !country, names_to = "year", values_to = "long_term_unemployment_rate") |> 
   mutate(year = as.numeric(year)) |> 
   filter(!is.na(long_term_unemployment_rate))
-
-head(unemployment_clean) |> 
-  kable(align = "ccc")
 ```
 
 ### Joining Datasets
@@ -110,16 +98,13 @@ Now that that's out of the way, we can join the two datasets into one variable. 
 murders_unemployment <-
   inner_join(murders_clean, unemployment_clean,
              by = join_by(country == country, year == year))
-
-head(murders_unemployment) |> 
-  kable(align = "cccc")
 ```
 
 There it is! We have our two datasets fully cleaned and joined into one table that we can continue to work with.
 
 ## Part 2: Linear Regression
 
-With the clean data, we will now compare the relationship between our two quantitative variables using a scatterplot. Unemployment will be our explanatory variable, while murder will be our response variable.
+With the clean data, we will now compare the relationship between our two quantitative variables using a scatterplot. Unemployment will be our explanatory variable, while murders will be our response variable.
 
 ### Visual Plots
 
@@ -128,7 +113,7 @@ murders_unemployment |>
   ggplot(aes(x = long_term_unemployment_rate, y = murders_per_100000)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(title = "Relationship Between Murder and Unemployment in Different Countries (1990 - 2016)",
+  labs(title = "Relationship Between Murder and Unemployment Rates in Different Countries (1990 - 2016)",
        x = "Unemployment Rate (%)",
        subtitle = "Murder (1 per 100,000)") +
   theme(axis.title.y = element_blank(),
@@ -182,7 +167,7 @@ The intercept is 0.339, meaning when unemployment rate is at 0%, we expect to ha
 
 ### Model Fit
 
-Now lets look at how well a linear model fits our data. We can find out by calculating the variation in our response variable (murder per 100,000), the fitted model values and residuals. 
+Now lets look at how well a linear model fits our data. We can find out by calculating the variation in our response variable (murders per 100,000), the fitted model values and residuals. 
 
 ```{r}
 observation_col <- select(lr_murders_unemployment, med_murders_per_100000)
@@ -246,7 +231,7 @@ simulation |>
   ggplot(aes(x = sim_murder, y = med_murders_per_100000)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(x = "Simulated Murder per 100000", y = "Observed Murder per 100000",
+  labs(x = "Simulated Murders per 100000", y = "Observed Murders per 100000",
        title = "Simulated Data VS Observed")
 ```
 
