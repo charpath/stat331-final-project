@@ -212,7 +212,7 @@ fitted_resid |>
 
 ```
 
-If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.435% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data even after a transformation and that we might not even be able to fit a linear model because there is no relationship between the two variables.
+If the variance of the response variable represents the total amount of variability, then the variance of the fitted values represent the proportion of the total variablility that is explained by our linear model, and the variance of the residuals represent the proportion of the total variablility that is not explained by our linear model. In our case, our linear model explained 0.02% of the total variability, making our linear model useless to observe the relationship between unemployment and murder. Our scatterplot also backs this up. Although our line of best fit seems to fit in most of the data, we have many "outliers" data that seems to not follow the pattern, suggesting that a linear model may not be the best model in representing our data even after a transformation and that we might not even be able to fit a linear model because there is no relationship between the two variables.
 
 ## Simulation
 
@@ -302,6 +302,14 @@ ggplot(sim_r_sq_df, aes(x = r_squared)) +
   labs(title = "Distribution of R-squared Values", caption = "*Red line represents original R-squared value", x = "R-squared", y = "Frequnecy") +
   theme_minimal()
 ```
+
 This is 1,000 $R^2$ values ploted on a plot. It is skewed to the left with our first $R^2$ value being close to the skew meaning that we were not unlucky with our first simulation and that typically, simulation does a poor job at explaining our observations. Our observations does not follow a linear model even after a transformation meaning our two variables are likely not related to one another.
 
 ## Conclusion
+
+It might seem that there might be a positive relationship between unemployment rate and murder rate on paper. After all, high unemployment can lead to financial stress, which may increase the chances of an individual to engage in violent crimes as a means of survival or out of frusturation. However, from our attempt to transform our data to fit a linear model and simulating generating many predictions for our data, it looks like the two variables are not related to one another. We cannot for certain say that the two variables are not related to one another since this was not an experiment but we can observe uncorellation and make hypotheses. 
+
+## Reference
+
+Gapminder Datasets:
+[Murders per 100,000 People and Long-Term Unemployment Rate](https://www.gapminder.org/data/)
